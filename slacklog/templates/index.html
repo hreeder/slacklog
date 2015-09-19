@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>SlackLog</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      body {
+        padding-top: 5px;
+      }
+
+      #heading {
+        text-align: center;
+        top: 0;
+        width: 100%;
+        position: fixed;
+      }
+
+      #messages {
+        padding-top: 32px;
+      }
+
+      .message {
+        line-height: normal;
+        padding-bottom: 5px;
+      }
+
+      .user-avatar {
+        padding-right: 5px;
+        height: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="heading">
+      <img src="{{ url_for('static', filename='img/nds_logo.jpg') }}" alt="" height="32px">
+      <img src="{{ url_for('static', filename='img/slack-logo_large.png') }}" alt="" height="32px">
+    </div>
+		<div id="messages">
+		{% for message in messages %}
+			<div class="message">
+				<img src="{{ message.user_image }}" class="pull-left user-avatar">
+				<b>{{ message.user_real_name|trim }}</b><br>
+				{{ message.text|trim|safe }}
+			</div>
+		{% endfor %}
+		</div>
+
+    {% raw %}
+    <script id="message-template" type="text/x-handlebars-template">
+      <div class="message">
+        <img src="{{ message.user_image }}" class="pull-left user-avatar">
+        <b>{{ message.user_real_name }}</b><br>
+        {{{ message.text }}}
+      </div>
+    </script>
+    {% endraw %}
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/handlebars-v4.0.2.js') }}"></script>
+    <script lang="text/javascript">
+      var receiver = new WebSocket("ws://" + location.host + "/ws");
+      receiver.onmessage = function(rawmessage) {
+          console.log(rawmessage);
+          message = JSON.parse(rawmessage['data']);
+          var source   = $("#message-template").html();
+          var template = Handlebars.compile(source);
+          var html     = template({
+            message: message
+          });
+          $('#messages').append(html);
+          window.scrollTo(0,document.body.scrollHeight);
+      }
+    </script>
+  </body>
+</html>
