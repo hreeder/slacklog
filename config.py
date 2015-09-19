@@ -1,5 +1,0 @@
-REDIS_URL = "redis://localhost:6379/"
-REDIS_CHAN = "slacklog"
-
-SLACK_INPUT_TOKEN = "zaO93Q26wpurqfz62qhpE6EA"
-SLACK_API_TOKEN = "xoxp-4933093937-4935681471-8624955249-f63b1a"
