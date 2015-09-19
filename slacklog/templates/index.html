@@ -73,9 +73,10 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/reconnecting-websocket.min.js') }}"></script<
     <script src="{{ url_for('static', filename='js/handlebars-v4.0.2.js') }}"></script>
     <script lang="text/javascript">
-      var receiver = new WebSocket("ws://" + location.host + "/ws");
+      var receiver = new ReconnectingWebSocket("ws://" + location.host + "/ws");
       receiver.onmessage = function(rawmessage) {
           console.log(rawmessage);
           message = JSON.parse(rawmessage['data']);
