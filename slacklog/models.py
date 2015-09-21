@@ -37,12 +37,17 @@ class Message(object):
             user = slack_users[self.user_id]
             self.user_real_name = user['profile']['real_name']
             self.user_image = user['profile']['image_192']
+            if not self.user_real_name:
+                self.user_real_name = user['name']
 
         def process_line(m):
             if m.group(1) and m.group(1) == "@":
                 if m.group(2) in slack_users:
                     user = slack_users[m.group(2)]
-                    return "<a href='#'>@%s (%s)</a>" % (user['name'], user['real_name'])
+                    if user['real_name']:
+                        return "<a href='#'>@%s (%s)</a>" % (user['name'], user['real_name'])
+                    else:
+                        return "<a href='#'>@%s</a>" % (user['name'],)
             elif m.group(1) and m.group(1) == "#":
                 if m.group(2) in slack_channels:
                     channel = slack_channels[m.group(2)]
