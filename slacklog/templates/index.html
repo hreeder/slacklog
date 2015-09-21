@@ -52,7 +52,7 @@
 		{% for message in messages %}
 			<div class="message">
 				<img src="{{ message.user_image }}" class="pull-left user-avatar">
-				<b>{{ message.user_real_name|trim }}</b><br>
+				<b>{{ message.user_real_name|trim }}</b> <small class="text-muted">{{ message.time }}</small><br>
 				{{ message.text|trim|safe }}
 			</div>
 		{% endfor %}
@@ -62,7 +62,7 @@
     <script id="message-template" type="text/x-handlebars-template">
       <div class="message">
         <img src="{{ message.user_image }}" class="pull-left user-avatar">
-        <b>{{ message.user_real_name }}</b><br>
+        <b>{{ message.user_real_name }}</b> <small class="text-muted">{{ message.time }}</small><br>
         {{{ message.text }}}
       </div>
     </script>

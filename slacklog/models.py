@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from slacklog import slack_users, slack_channels
@@ -56,4 +57,5 @@ class Message(object):
                 return "<a href='%s'>%s</a>" % (m.group(2), m.group(2))
 
         self.text = re.sub("<(@|#)?(.*?)>", process_line, self.text)
+        self.time = datetime.datetime.fromtimestamp(int(self.timestamp.split(".")[0])).strftime("%H:%M")
         return
