@@ -36,4 +36,4 @@ def ws_endpoint(ws):
     backend.register(ws)
 
     while not ws.closed:
-        gevent.sleep()
+        gevent.sleep(1)
