@@ -42,6 +42,12 @@
         padding-right: 5px;
         height: 32px;
       }
+      .emoji {
+          width: 1.5em;
+          height: 1.5em;
+          display: inline-block;
+          margin-bottom: -0.25em;
+      }
     </style>
   </head>
   <body>
@@ -76,7 +82,14 @@
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="{{ url_for('static', filename='js/reconnecting-websocket.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/handlebars-v4.0.2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/emojify.min.js') }}"></script>
     <script lang="text/javascript">
+      emojify.setConfig({
+        img_dir: 'static/img/basic'
+      })
+      $(document).ready(function() {
+        emojify.run();
+      });
       var receiver = new ReconnectingWebSocket("ws://" + location.host + "/ws");
       receiver.onmessage = function(rawmessage) {
           console.log(rawmessage);
@@ -88,6 +101,7 @@
           });
           $('#messages').append(html);
           window.scrollTo(0,document.body.scrollHeight);
+          emojify.run();
       }
     </script>
   </body>
